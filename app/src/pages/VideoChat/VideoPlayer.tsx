@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { SocketContext, SocketContextType } from "../../SocketContext";
+import { SocketContext, SocketContextType } from "./SocketContext";
 import "./VideoPlayer.css";
 
 const VideoPlayer = () => {

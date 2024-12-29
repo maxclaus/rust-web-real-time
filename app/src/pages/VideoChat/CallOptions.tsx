@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { BiClipboard, BiPhoneCall, BiPhoneOff } from "react-icons/bi";
-import { SocketContext, SocketContextType } from "../../SocketContext";
+import { SocketContext, SocketContextType } from "./SocketContext";
 import "./CallOptions.css";
 
 const Options = () => {
