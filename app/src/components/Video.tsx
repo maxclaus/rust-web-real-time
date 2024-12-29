@@ -1,11 +1,7 @@
-import { useState } from 'react'
+import "react";
 
 function Video() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <video id="gum-local" autoplay playsinline></video>
-  );
+  return <video id="gum-local" autoPlay playsInline></video>;
 }
 
-export default Video
+export default Video;

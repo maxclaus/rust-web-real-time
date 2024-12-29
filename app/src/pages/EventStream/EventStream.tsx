@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
-import reactLogo from "../../assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./EventStream.css";
 
 function EventStream() {
-  const [events, setEvents] = useState([]);
-  const [connected, setConnected] = useState(true);
+  const [events, setEvents] = useState<Array<string>>([]);
+  const [connected, setConnected] = useState<boolean>(true);
 
   useEffect(() => {
     // SSE (Server-Sent Events)

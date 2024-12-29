@@ -1,14 +1,15 @@
 import { useContext } from "react";
-import { SocketContext } from "../../SocketContext";
+import { SocketContext, SocketContextType } from "../../SocketContext";
 import "./Notifications.css";
 
 const Notifications = () => {
-  const { answerCall, call, callAccepted, leaveCall } =
-    useContext(SocketContext);
+  const { answerCall, call, callAccepted, leaveCall } = useContext(
+    SocketContext,
+  ) as SocketContextType;
 
   return (
     <>
-      {call.isReceivingCall && !callAccepted && (
+      {call?.isReceivingCall && !callAccepted && (
         <>
           <div className="notifications-modal-overlay"></div>
           <div className="notifications-modal">

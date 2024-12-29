@@ -1,12 +1,9 @@
-import { useState, useEffect } from "react";
-import reactLogo from "../../assets/react.svg";
-import viteLogo from "/vite.svg";
+import "react";
 import "./VideoChat.css";
 import VideoPlayer from "./VideoPlayer.tsx";
 import CallOptions from "./CallOptions.tsx";
 import Notifications from "./Notifications.tsx";
 
-// https://cloudinary.com/blog/guest_post/stream-videos-with-webrtc-api-and-react
 function VideoChat() {
   return (
     <>

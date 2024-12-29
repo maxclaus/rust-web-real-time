@@ -1,12 +1,12 @@
 import { useState, useContext } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { BiClipboard, BiPhoneCall, BiPhoneOff } from "react-icons/bi";
-import { SocketContext } from "../../SocketContext";
+import { SocketContext, SocketContextType } from "../../SocketContext";
 import "./CallOptions.css";
 
 const Options = () => {
   const { me, callAccepted, name, setName, callEnded, leaveCall, callUser } =
-    useContext(SocketContext);
+    useContext(SocketContext) as SocketContextType;
   const [idToCall, setIdToCall] = useState("");
 
   return (
@@ -21,7 +21,7 @@ const Options = () => {
             onChange={(e) => setName(e.target.value)}
             width="100%"
           />
-          <CopyToClipboard text={me} mt="20">
+          <CopyToClipboard text={me}>
             <button>
               <BiClipboard />
               Copy ID

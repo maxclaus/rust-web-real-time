@@ -1,20 +1,51 @@
-import { createContext, useState, useRef, useEffect, useCallback } from "react";
+import {
+  createContext,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  MutableRefObject,
+} from "react";
 import Peer from "simple-peer";
 
-const SocketContext = createContext();
+type CallData = {
+  isReceivingCall: boolean;
+  from: string;
+  name: string;
+  signal: string;
+};
 
-const SocketContextProvider = ({ children }) => {
+export type SocketContextType = {
+  call: CallData | undefined;
+  callAccepted: boolean;
+  myVideo: MutableRefObject<HTMLVideoElement | null>;
+  userVideo: MutableRefObject<HTMLVideoElement | null>;
+  stream: MediaStream | undefined;
+  name: string;
+  setName: (name: string) => void;
+  callEnded: boolean;
+  me: string;
+  callUser: (id: string) => void;
+  leaveCall: () => void;
+  answerCall: () => void;
+};
+
+const SocketContext = createContext<SocketContextType | null>(null);
+
+const SocketContextProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [callAccepted, setCallAccepted] = useState(false);
   const [callEnded, setCallEnded] = useState(false);
-  const [stream, setStream] = useState();
+  const [stream, setStream] = useState<MediaStream>();
   const [name, setName] = useState("");
-  const [call, setCall] = useState({});
+  const [call, setCall] = useState<CallData | undefined>();
   const [me, setMe] = useState("");
-  const [ws, setWs] = useState(null);
-  const [callerPeer, setCallerPeer] = useState(null);
-  const myVideo = useRef();
-  const userVideo = useRef();
-  const connectionRef = useRef();
+  const [ws, setWs] = useState<WebSocket | null>(null);
+  const [callerPeer, setCallerPeer] = useState<Peer.Instance | null>(null);
+  const myVideo = useRef<HTMLVideoElement>(null);
+  const userVideo = useRef<HTMLVideoElement>(null);
+  const connectionRef = useRef<Peer.Instance>();
   console.log("****SocketContextProvider video", myVideo.current);
   console.log("****SocketContextProvider stream", stream);
 
@@ -22,8 +53,8 @@ const SocketContextProvider = ({ children }) => {
     let roomId = "41feb23b-7882-4754-a18a-4fbdaf0bcd77";
     const ws = new WebSocket(`http://localhost:8080/videochat/${roomId}`);
 
-    const openHandler = (event) => {
-      console.log("***Connection opened!", event.data);
+    const openHandler = (event: Event) => {
+      console.log("***Connection opened!", event);
     };
 
     ws.addEventListener("open", openHandler);
@@ -41,7 +72,7 @@ const SocketContextProvider = ({ children }) => {
       return;
     }
 
-    const messageHandler = (event) => {
+    const messageHandler = (event: MessageEvent) => {
       console.log("***Message from server ", event.data);
       const msg = JSON.parse(event.data);
       switch (msg.type) {
@@ -60,7 +91,7 @@ const SocketContextProvider = ({ children }) => {
         }
         case "CallAccepted": {
           setCallAccepted(true);
-          callerPeer.signal(JSON.parse(msg.data.signal));
+          callerPeer?.signal(JSON.parse(msg.data.signal));
           break;
         }
         default: {
@@ -84,7 +115,9 @@ const SocketContextProvider = ({ children }) => {
       .getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
         setStream(currentStream);
-        myVideo.current.srcObject = currentStream;
+        if (myVideo.current) {
+          myVideo.current.srcObject = currentStream;
+        }
         console.log("****getUserMedia loaded video", myVideo.current);
         console.log("****getUserMedia loaded stream", currentStream);
       });
@@ -96,6 +129,10 @@ const SocketContextProvider = ({ children }) => {
   }, [myVideo.current]);
 
   const answerCall = useCallback(() => {
+    if (!stream || !call) {
+      return;
+    }
+
     setCallAccepted(true);
     const peer = new Peer({ initiator: false, trickle: false, stream });
     console.log("***answerCall: peer", peer);
@@ -113,14 +150,16 @@ const SocketContextProvider = ({ children }) => {
     });
     peer.on("stream", (currentStream) => {
       console.log("***answerCall: Peer on stream");
-      userVideo.current.srcObject = currentStream;
+      if (userVideo.current) {
+        userVideo.current.srcObject = currentStream;
+      }
     });
     peer.signal(call.signal);
     connectionRef.current = peer;
   }, [stream, call]);
 
   const callUser = useCallback(
-    (id) => {
+    (id: string) => {
       const peer = new Peer({ initiator: true, trickle: false, stream });
       setCallerPeer(peer);
       console.log("***callUser: peer", peer);
@@ -140,7 +179,9 @@ const SocketContextProvider = ({ children }) => {
       });
       peer.on("stream", (currentStream) => {
         console.log("***callUser: Peer on streeam");
-        userVideo.current.srcObject = currentStream;
+        if (userVideo.current) {
+          userVideo.current.srcObject = currentStream;
+        }
       });
       // socket.on('callAccepted', (signal) => {
       //     setCallAccepted(true);
@@ -153,9 +194,11 @@ const SocketContextProvider = ({ children }) => {
 
   const leaveCall = useCallback(() => {
     setCallEnded(true);
-    connectionRef.current.destroy();
+    if (connectionRef.current) {
+      connectionRef.current.destroy();
+    }
     window.location.reload();
-  });
+  }, []);
 
   return (
     <SocketContext.Provider
