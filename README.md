@@ -2,7 +2,7 @@
 
 Demo app running on https://rust-web-real-time.onrender.com.
 
-Project demo testing out web real time apps using Rust for the backend and React for the frontend.
+Project demo testing out the implementation of web real time apps using Rust for the backend and React for the frontend.
 
 It contains samples for:
 

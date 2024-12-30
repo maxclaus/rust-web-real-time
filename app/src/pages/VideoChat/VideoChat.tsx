@@ -14,7 +14,7 @@ function VideoChat({ serverURL }: VideoChatProps) {
     <SocketContextProvider serverURL={serverURL}>
       <h2>Video Chat</h2>
       <p>
-        This is an example of a video chat using these technologies :
+        This is an example of a video chat using these technologies:{" "}
         <a href="https://webrtc.org/" target="_blank">
           WebRTC
         </a>
@@ -25,9 +25,7 @@ function VideoChat({ serverURL }: VideoChatProps) {
         >
           Web Socket
         </a>
-        {
-          " for real time data communication, used in this case to notify users when is someone calling for instance."
-        }
+        {" for real time data communication."}
       </p>
       <VideoPlayer />
       <CallOptions />
