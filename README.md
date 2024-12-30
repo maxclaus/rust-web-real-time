@@ -4,6 +4,16 @@ Demo app running on https://rust-web-real-time.onrender.com.
 
 Project demo testing out web real time apps using Rust for the backend and React for the frontend.
 
+It contains samples for:
+
+- [EventStream](https://developer.mozilla.org/en-US/docs/Web/API/EventSource)
+- [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket)
+- [WebRTC](https://webrtc.org/)
+
+May add samples for these later:
+
+- [WebSocketStream](https://developer.mozilla.org/en-US/docs/Web/API/WebSocketStream)
+
 ## References
 
 - https://webrtc.github.io/samples/
