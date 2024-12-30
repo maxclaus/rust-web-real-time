@@ -1,7 +1,8 @@
-use std::sync::Mutex;
+use std::fs;
 
 use actix::Actor;
 use actix_cors::Cors;
+use actix_files::Files;
 use actix_rt;
 use actix_web::body::MessageBody;
 use actix_web::dev::{ServiceRequest, ServiceResponse};
@@ -54,6 +55,15 @@ async fn get_julia_image(query: web::Query<JuliaParams>) -> Result<impl Responde
     Ok(web::Json(obj))
 }
 
+async fn index() -> impl Responder {
+    let html_content = fs::read_to_string("app/dist/index.html")
+        .unwrap_or_else(|_| "<h1>404: File Not Found</h1>".to_string());
+
+    actix_web::HttpResponse::Ok()
+        .content_type("text/html")
+        .body(html_content)
+}
+
 async fn error_mw(
     req: ServiceRequest,
     next: Next<impl MessageBody>,
@@ -69,7 +79,9 @@ async fn error_mw(
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    // Debug logs
     env_logger::init_from_env(Env::default().default_filter_or("debug"));
+
     // Create and spin up a lobby
     let chat_server = Data::new(Lobby::default().start());
 
@@ -81,10 +93,23 @@ async fn main() -> std::io::Result<()> {
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))
             .wrap(from_fn(error_mw))
+            // API routes
             .service(get_julia_image)
-            .service(evenstream_handler::get_eventstream)
-            .service(web::resource("/ws").route(web::get().to(julia_ws)))
-            .service(ws_webrtc_handler::start_connection)
+            .service(web::resource("/api/ws/julia").route(web::get().to(julia_ws)))
+            .service(
+                web::resource("/api/eventstream")
+                    .route(web::get().to(evenstream_handler::get_eventstream)),
+            )
+            .service(
+                web::resource("api/ws/videochat/{group_id}")
+                    .route(web::get().to(ws_webrtc_handler::start_connection)),
+            )
+            // HTML routes
+            .service(web::resource("/").route(web::get().to(index)))
+            .service(web::resource("/eventstream").route(web::get().to(index)))
+            .service(web::resource("/videochat").route(web::get().to(index)))
+            // Static files
+            .service(Files::new("/", "./app/dist"))
             .app_data(chat_server.clone())
     })
     .bind(("127.0.0.1", 8080))?

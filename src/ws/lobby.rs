@@ -3,7 +3,7 @@ use crate::ws::messages::{
     Disconnect, WsMessage,
 };
 use actix::prelude::{Actor, Context, Handler, Recipient};
-use serde_json::{error::Result as SerdeResult, to_string, Value};
+use serde_json::to_string;
 use std::collections::{HashMap, HashSet};
 use uuid::Uuid;
 
@@ -11,16 +11,13 @@ type Socket = Recipient<WsMessage>;
 
 // Lobby (aka Connections Hub)
 pub struct Lobby {
-    id: Uuid,
     sessions: HashMap<Uuid, Socket>, // user connection id -> connection
     rooms: HashMap<Uuid, HashSet<Uuid>>, // room id -> set of user connection ids
 }
 
 impl Default for Lobby {
     fn default() -> Lobby {
-        println!("new lobby data");
         Lobby {
-            id: Uuid::new_v4(),
             sessions: HashMap::new(),
             rooms: HashMap::new(),
         }

@@ -1,13 +1,17 @@
 import { useState, useEffect } from "react";
 import "./EventStream.css";
 
-function EventStream() {
+interface EventStreamProps {
+  serverURL: string;
+}
+
+function EventStream({ serverURL }: EventStreamProps) {
   const [events, setEvents] = useState<Array<string>>([]);
   const [connected, setConnected] = useState<boolean>(true);
 
   useEffect(() => {
     // SSE (Server-Sent Events)
-    let sse = new EventSource("http://localhost:8080/eventstream");
+    let sse = new EventSource(`${serverURL}/api/eventstream`);
     sse.onopen = (e) => {
       console.log("EventStream open", e);
       setEvents([]);

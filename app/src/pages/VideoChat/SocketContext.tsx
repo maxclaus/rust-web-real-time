@@ -32,9 +32,15 @@ export type SocketContextType = {
 
 const SocketContext = createContext<SocketContextType | null>(null);
 
-const SocketContextProvider: React.FC<{ children: React.ReactNode }> = ({
+type SocketContextProviderProps = {
+  serverURL: string;
+  children: React.ReactNode;
+};
+
+function SocketContextProvider({
   children,
-}) => {
+  serverURL,
+}: SocketContextProviderProps) {
   const [callAccepted, setCallAccepted] = useState(false);
   const [callEnded, setCallEnded] = useState(false);
   const [stream, setStream] = useState<MediaStream>();
@@ -51,7 +57,7 @@ const SocketContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     let roomId = "41feb23b-7882-4754-a18a-4fbdaf0bcd77";
-    const ws = new WebSocket(`http://localhost:8080/videochat/${roomId}`);
+    const ws = new WebSocket(`${serverURL}/api/ws/videochat/${roomId}`);
 
     const openHandler = (event: Event) => {
       console.log("***Connection opened!", event);
@@ -220,5 +226,5 @@ const SocketContextProvider: React.FC<{ children: React.ReactNode }> = ({
       {children}
     </SocketContext.Provider>
   );
-};
+}
 export { SocketContextProvider, SocketContext };

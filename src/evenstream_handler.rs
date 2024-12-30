@@ -1,5 +1,4 @@
 use actix_web::{
-    get,
     http::{self},
     web::Bytes,
     HttpResponse,
@@ -8,7 +7,6 @@ use futures::{channel::mpsc, SinkExt};
 use std::time::Duration;
 use tokio::time::sleep;
 
-#[get("/eventstream")]
 pub async fn get_eventstream() -> HttpResponse {
     let buf_size = 10_usize;
 

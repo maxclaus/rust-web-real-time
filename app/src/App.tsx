@@ -3,11 +3,15 @@ import { Outlet, Link } from "react-router";
 import "./App.css";
 
 function App() {
+  const Divider = () => <span>|</span>;
   return (
     <div>
       <h1>Web Real Time Apps</h1>
-      <div>
-        <Link to="/">Home</Link> | <Link to="/eventstream">Event Stream</Link> |{" "}
+      <div className="menu">
+        <Link to="/">Home</Link>
+        <Divider />
+        <Link to="/eventstream">Event Stream</Link>
+        <Divider />
         <Link to="/videochat">Video Chat</Link>
       </div>
       <Outlet />

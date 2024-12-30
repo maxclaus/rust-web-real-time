@@ -5,9 +5,13 @@ import CallOptions from "./CallOptions.tsx";
 import Notifications from "./Notifications.tsx";
 import { SocketContextProvider } from "./SocketContext";
 
-function VideoChat() {
+interface VideoChatProps {
+  serverURL: string;
+}
+
+function VideoChat({ serverURL }: VideoChatProps) {
   return (
-    <SocketContextProvider>
+    <SocketContextProvider serverURL={serverURL}>
       <h2>Video Chat</h2>
       <p>
         This is an example of a video chat using these technologies{" "}
