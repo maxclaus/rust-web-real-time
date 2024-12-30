@@ -7,6 +7,7 @@ node --version
 npm --version
 (
   cd app
+  npm ci
   npm run build
 )
 pwd
