@@ -117,7 +117,7 @@ async fn main() -> std::io::Result<()> {
             .service(Files::new("/", "./app/dist"))
             .app_data(chat_server.clone())
     })
-    .bind(("127.0.0.1", server_port))?
+    .bind(("0.0.0.0", server_port))?
     .run()
     .await
 }
