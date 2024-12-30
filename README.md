@@ -6,6 +6,7 @@ Project demo testing out web real time apps using Rust for the backend and React
 
 ## References
 
+- https://webrtc.github.io/samples/
 - https://medium.com/@Jayseabee/rust-react-part-i-3a33c3da9ca0
 - https://cloudinary.com/blog/guest_post/stream-videos-with-webrtc-api-and-react
 - https://github.com/antholeole/actix-sockets

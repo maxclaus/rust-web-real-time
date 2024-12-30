@@ -1,14 +1,11 @@
-// Based on: 
+// Based on:
 // https://github.com/actix/examples/blob/master/websockets/echo-actorless/src/handler.rs
 
-
 use actix_ws::Message;
-use futures_util::{
-    StreamExt as _,
-};
+use futures_util::StreamExt as _;
 
+use crate::julia::{julia_generate, JuliaParams};
 use serde_json;
-use crate::julia::{JuliaParams, julia_generate};
 
 pub async fn julia_ws(mut session: actix_ws::Session, mut msg_stream: actix_ws::MessageStream) {
     log::info!("connected");
@@ -21,7 +18,6 @@ pub async fn julia_ws(mut session: actix_ws::Session, mut msg_stream: actix_ws::
                 match msg {
                     Message::Text(text) => {
                         let julia_params: JuliaParams = serde_json::from_str(&text).unwrap();
-                        //println!("--- WS: value = {:#?}", julia_params);
                         let data = julia_generate(&julia_params);
                         session.binary(data).await.unwrap();
                     }
@@ -72,15 +68,15 @@ mod tests {
         #[derive(Debug, Deserialize)]
         struct JStruct {
             pub cx: f32,
-         }
-        
+        }
+
         let data = r#"
         {
             "cx": 1.58
         }"#;
         let jstruct: JStruct = serde_json::from_str(data).unwrap();
-        println!("{:?}", jstruct);
 
         assert!(jstruct.cx == 1.58);
     }
 }
+

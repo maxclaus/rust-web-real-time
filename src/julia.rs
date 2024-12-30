@@ -3,16 +3,15 @@ use serde::Deserialize;
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct JuliaParams {
-   pub width: u32,
-   pub height: u32,
-   pub cx: f32,
-   pub cy: f32,
+    pub width: u32,
+    pub height: u32,
+    pub cx: f32,
+    pub cy: f32,
 }
 
 // Modified from:
 // https://rosettacode.org/wiki/Julia_set#Rust
 pub fn julia_generate(params: &JuliaParams) -> Vec<u8> {
-
     let mut ret = Vec::<u8>::new();
     let iterations = 280;
 
@@ -57,17 +56,15 @@ pub fn julia_generate(params: &JuliaParams) -> Vec<u8> {
 mod tests {
     use super::*;
     use image::{ImageBuffer, Rgb};
-    use std::time::{Instant};
     use rand::{distributions::Uniform, Rng};
+    use std::time::Instant;
 
     fn save_image(rgb: Vec<u8>, width: u32, height: u32, fname: String) -> bool {
         let mut img = ImageBuffer::new(width as u32, height as u32);
-        let mut idx:usize = 0;
+        let mut idx: usize = 0;
         for y in 0..height {
             for x in 0..width {
-                let pixel = Rgb([
-                    rgb[idx] as u8, rgb[idx+1] as u8, rgb[idx+2] as u8
-                ]);
+                let pixel = Rgb([rgb[idx] as u8, rgb[idx + 1] as u8, rgb[idx + 2] as u8]);
                 idx += 4; // its encoded as rgba
                 img.put_pixel(x as u32, y as u32, pixel);
             }
@@ -86,20 +83,28 @@ mod tests {
             cy: 0.05543246580171968,
         };
         let v = julia_generate(&params);
-        println!("Julia set generation: cx: {:.3}, cy: {:.3}, time: {:.2?}", 
-            params.cx, params.cy, start.elapsed());
+        log::error!(
+            "Julia set generation: cx: {:.3}, cy: {:.3}, time: {:.2?}",
+            params.cx,
+            params.cy,
+            start.elapsed()
+        );
 
-        assert!(save_image(v, params.width, params.height, "julia-set.png".to_string()));
+        assert!(save_image(
+            v,
+            params.width,
+            params.height,
+            "julia-set.png".to_string()
+        ));
     }
 
     #[test]
     fn julia_speed() {
-
         let mut params = JuliaParams {
             width: 800,
             height: 500,
             cx: 0.0,
-            cy: 0.0
+            cy: 0.0,
         };
 
         let mut rng = rand::thread_rng();
@@ -111,10 +116,15 @@ mod tests {
             params.cy = rng.sample(&cy_range);
             let start = Instant::now();
             let _v = julia_generate(&params);
-            println!("Julia set generation: cx: {:.3}, cy: {:.3}, time: {:.2?}", 
-                params.cx, params.cy, start.elapsed());
+            log::error!(
+                "Julia set generation: cx: {:.3}, cy: {:.3}, time: {:.2?}",
+                params.cx,
+                params.cy,
+                start.elapsed()
+            );
         }
 
         assert!(true);
     }
 }
+

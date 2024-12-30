@@ -66,7 +66,7 @@ impl WsConn {
     fn hb(&self, ctx: &mut ws::WebsocketContext<Self>) {
         ctx.run_interval(HEARTBEAT_INTERVAL, |act, ctx| {
             if Instant::now().duration_since(act.hb) > CLIENT_TIMEOUT {
-                println!("Disconnecting failed heartbeat");
+                log::error!("Disconnecting failed heartbeat");
                 ctx.stop();
                 return;
             }
@@ -103,7 +103,7 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WsConn {
             Ok(Text(ref s)) => {
                 match serde_json::from_str(&s) {
                     Ok(msg) => {
-                        println!("StreamHandler: got user message");
+                        log::error!("StreamHandler: got user message");
                         self.lobby_addr.do_send(ClientActorMessage {
                             id: self.id,
                             msg,
@@ -111,7 +111,7 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WsConn {
                         });
                     }
                     Err(err) => {
-                        println!("Error deserilizing message: {msg:#?}: {err:?}");
+                        log::error!("Error deserilizing message: {msg:#?}: {err:?}");
                         // TODO: respond back to client about this error
                         ctx.stop();
                     }

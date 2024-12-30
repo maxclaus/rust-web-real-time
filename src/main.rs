@@ -71,7 +71,7 @@ async fn error_mw(
     let res = next.call(req).await?;
 
     if let Some(error) = res.response().error() {
-        println!("Error in response: {:?}", error);
+        log::error!("Error in response: {:?}", error);
     }
 
     Ok(res)

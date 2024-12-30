@@ -24,7 +24,7 @@ pub async fn get_eventstream() -> HttpResponse {
             // Send the first event
             let event = format!("data: {}\n\n", word);
             if let Err(err) = tx.send(Ok(Bytes::from(event))).await {
-                eprintln!("Error sending first event: {:?}", err);
+                log::error!("Error sending first event: {:?}", err);
                 return;
             }
             sleep(Duration::from_secs(1)).await;
