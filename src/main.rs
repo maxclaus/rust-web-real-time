@@ -1,4 +1,4 @@
-use std::fs;
+use std::{env, fs};
 
 use actix::Actor;
 use actix_cors::Cors;
@@ -82,6 +82,11 @@ async fn main() -> std::io::Result<()> {
     // Debug logs
     env_logger::init_from_env(Env::default().default_filter_or("debug"));
 
+    let server_port = env::var("PORT")
+        .unwrap_or("8080".to_string())
+        .parse::<u16>()
+        .unwrap();
+
     // Create and spin up a lobby
     let chat_server = Data::new(Lobby::default().start());
 
@@ -112,7 +117,7 @@ async fn main() -> std::io::Result<()> {
             .service(Files::new("/", "./app/dist"))
             .app_data(chat_server.clone())
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind(("127.0.0.1", server_port))?
     .run()
     .await
 }
