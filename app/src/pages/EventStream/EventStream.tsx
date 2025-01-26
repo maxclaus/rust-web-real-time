@@ -41,10 +41,10 @@ function EventStream({ serverURL }: EventStreamProps) {
       <p>
         This is an example of{" "}
         <a
-          href="https://developer.mozilla.org/en-US/docs/Web/API/EventSource"
+          href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events"
           target="_blank"
         >
-          Event Source
+          Server-sent events (SSE)
         </a>{" "}
         implementation.
       </p>
