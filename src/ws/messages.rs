@@ -43,6 +43,7 @@ impl ClientActorMessage {
 #[serde(tag = "type", content = "data")]
 pub enum ActorMessageKind {
     Me(ActorMessageMe),
+    Message(ActorMessageMessage),
     CallUser(ActorMessageCallUser),
     AnswerCall(ActorMessageAnswerCall),
     CallAccepted(ActorMessageCallAccepted),
@@ -51,6 +52,13 @@ pub enum ActorMessageKind {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ActorMessageMe {
     pub id: Uuid,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ActorMessageMessage {
+    pub from_user_id: Uuid,
+    pub from_user_name: String,
+    pub message: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

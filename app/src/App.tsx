@@ -12,6 +12,8 @@ function App() {
         <Divider />
         <Link to="/eventstream">Event Stream</Link>
         <Divider />
+        <Link to="/chat">Chat</Link>
+        <Divider />
         <Link to="/videochat">Video Chat</Link>
       </div>
       <Outlet />

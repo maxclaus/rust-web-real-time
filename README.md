@@ -1,6 +1,6 @@
 # rust web real time
 
-Demo app running on https://rust-web-real-time.onrender.com.
+Demo app running on https://rust-web-real-time.onrender.com (it may take a few seconds for the initial loading).
 
 Project demo testing out the implementation of web real time apps using Rust for the backend and React for the frontend.
 
@@ -13,6 +13,23 @@ It contains samples for:
 May add samples for these later:
 
 - [WebSocketStream](https://developer.mozilla.org/en-US/docs/Web/API/WebSocketStream)
+
+## Running it in development
+
+In one shell window run this command below to start the backend server:
+
+```
+cargo run
+```
+
+In another shell window run this command below to start the frontend app:
+
+```
+cd app
+npm run dev
+```
+
+Then open the browser at address http://localhost:5173/.
 
 ## References
 

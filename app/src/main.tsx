@@ -5,6 +5,7 @@ import App from "./App.tsx";
 import Home from "./pages/Home/Home.tsx";
 import EventStream from "./pages/EventStream/EventStream.tsx";
 import VideoChat from "./pages/VideoChat/VideoChat.tsx";
+import Chat from "./pages/Chat/Chat.tsx";
 import { BrowserRouter, Routes, Route } from "react-router";
 
 declare global {
@@ -27,6 +28,7 @@ createRoot(document.getElementById("root")!).render(
           path="eventstream"
           element={<EventStream serverURL={serverURL} />}
         />
+        <Route path="chat" element={<Chat serverURL={serverURL} />} />
         <Route path="videochat" element={<VideoChat serverURL={serverURL} />} />
       </Route>
     </Routes>

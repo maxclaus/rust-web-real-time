@@ -56,8 +56,10 @@ function SocketContextProvider({
   console.log("****SocketContextProvider stream", stream);
 
   useEffect(() => {
+    // NOTE: use a hard coded id for this demos, but in real life
+    // it should be handled by provided by the backend.
     let roomId = "41feb23b-7882-4754-a18a-4fbdaf0bcd77";
-    const ws = new WebSocket(`${serverURL}/api/ws/videochat/${roomId}`);
+    const ws = new WebSocket(`${serverURL}/api/ws/rooms/${roomId}`);
 
     const openHandler = (event: Event) => {
       console.log("***Connection opened!", event);

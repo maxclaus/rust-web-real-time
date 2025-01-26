@@ -106,12 +106,13 @@ async fn main() -> std::io::Result<()> {
                     .route(web::get().to(evenstream_handler::get_eventstream)),
             )
             .service(
-                web::resource("api/ws/videochat/{group_id}")
+                web::resource("api/ws/rooms/{room_id}")
                     .route(web::get().to(ws_webrtc_handler::start_connection)),
             )
             // HTML routes
             .service(web::resource("/").route(web::get().to(index)))
             .service(web::resource("/eventstream").route(web::get().to(index)))
+            .service(web::resource("/chat").route(web::get().to(index)))
             .service(web::resource("/videochat").route(web::get().to(index)))
             // Static files
             .service(Files::new("/", "./app/dist"))

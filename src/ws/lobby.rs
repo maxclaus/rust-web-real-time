@@ -107,6 +107,9 @@ impl Handler<ClientActorMessage> for Lobby {
 
     fn handle(&mut self, msg: ClientActorMessage, _ctx: &mut Context<Self>) -> Self::Result {
         match msg.msg {
+            ActorMessageKind::Message(_) => {
+                self.broadcast_message(&msg);
+            }
             ActorMessageKind::CallUser(ref inner_msg) => {
                 self.direct_message(&inner_msg.calling_to_user_id, &msg);
             }
@@ -123,6 +126,10 @@ impl Handler<ClientActorMessage> for Lobby {
                 );
             }
             ActorMessageKind::Me(_) | ActorMessageKind::CallAccepted(_) => {
+                // These messages should never be sent by clients,
+                // only the server can perform them.
+                // Leaving it as unreachable on this example, but on real life
+                // this error should be handled properly.
                 unreachable!()
             }
         }
